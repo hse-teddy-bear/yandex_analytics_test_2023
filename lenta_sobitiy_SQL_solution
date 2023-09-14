@@ -1,0 +1,31 @@
+  WITH session_counts as (
+    SELECT uuid, COUNT(DISTINCT session_uuid) AS sessions
+    FROM (
+        SELECT uuid, event, timestamp,
+            SUM(is_new_session) OVER (PARTITION BY uuid ORDER BY timestamp) AS session_uuid
+        FROM (
+            SELECT uuid, event, timestamp,
+                CASE
+                    WHEN event = 'open' THEN 1
+                    ELSE 0
+                END AS is_new_session
+            FROM feed_events
+        )
+    )
+    WHERE event = 'click'
+    GROUP BY uuid
+), session_counts_with_null AS (
+    SELECT *
+    FROM session_counts
+
+    UNION
+
+    SELECT uuid, 0 AS sessions
+    FROM feed_events
+    WHERE uuid NOT IN (SELECT uuid FROM session_counts)
+)
+
+SELECT *
+FROM session_counts_with_null
+ORDER BY sessions DESC, uuid ASC
+LIMIT 10;
