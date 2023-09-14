@@ -1,0 +1,12 @@
+n = int(input())
+
+def countPrimes(n: int) -> int:
+    primes = [1 for _ in range(n - 1)]
+    for i in range(2, int(n ** .5) + 1):
+        if primes[i - 2]:
+            for j in range(i * i, n + 1, i):
+                primes[j - 2] = 0
+    return sum(primes)
+
+m = countPrimes(n)
+print(f"{m / n:.02f}")
