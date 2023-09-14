@@ -1,0 +1,20 @@
+n = int(input())
+dirs = list(map(int, input().split()))
+current = 0
+working = True
+nodes_passed = set()
+prefix_curnt = [None,0]
+while working:
+    if dirs[current] == -1:
+        print("NO")
+        break
+    else:
+        current = dirs[current]
+        prev = prefix_curnt[1]
+        prefix_curnt[1] = current
+        if prefix_curnt[1] == prefix_curnt[0] or current in nodes_passed:
+            print("YES")
+            break
+        else:
+            nodes_passed.add(prev)
+            prefix_curnt[0] = prev
