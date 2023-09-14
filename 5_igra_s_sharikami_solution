@@ -1,0 +1,31 @@
+#O(1)
+import math
+n = int(input())
+answer = 0
+
+if n <= 3:
+    if n == 1:
+        print('2 7')
+    elif n == 2:
+        print('3 8')
+    elif n == 3:
+        print('5 12')
+
+if n >= 4:
+    top = n**2 + 7*n - 30
+    bottom = 12*(n+1)*(n+6)
+
+    real_top = 5*(n+1)*(n+6) + top
+    real_bottom = bottom
+    tb = [real_top, real_bottom]
+
+
+    top_sum = tb[0]
+    bot_sum = tb[1]
+    nod = math.gcd(top_sum, bot_sum)
+
+    x1 = (top_sum // nod)
+    x2 = (bot_sum // nod)
+    tb = [x1, x2]
+
+    print(f'{tb[0]} {tb[1]}')
